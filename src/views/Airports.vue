@@ -2,7 +2,7 @@
   <div class="airports">
     <v-data-table
       :headers="headers"
-      :items="airports"
+      :items="allAirports.length > 0 && allAirports"
       :items-per-page="10"
       :search="search"
       class="elevation-5 ma-5"
@@ -25,7 +25,9 @@
 
           <v-dialog v-model="dialog" max-width="60%">
             <template v-slot:activator="{ on, attrs }">
-              <v-btn color="primary" dark class="mb-2" v-bind="attrs" v-on="on">+ Add New Aiport</v-btn>
+              <v-btn color="primary" dark class="mb-2" v-bind="attrs" v-on="on"
+                >+ Add New Aiport</v-btn
+              >
             </template>
 
             <v-card>
@@ -36,18 +38,48 @@
                 <v-container>
                   <v-row>
                     <v-col cols="12" sm="6" md="6">
-                      <v-text-field v-model="editedAirport.name" label="Name"></v-text-field>
-                      <v-text-field v-model="editedAirport.city" label="City"></v-text-field>
-                      <v-text-field v-model="editedAirport.country" label="Country"></v-text-field>
-                      <v-text-field v-model="editedAirport.iata" label="IATA"></v-text-field>
-                      <v-text-field v-model="editedAirport.icao" label="ICAO"></v-text-field>
+                      <v-text-field
+                        v-model="editedAirport.name"
+                        label="Name"
+                      ></v-text-field>
+                      <v-text-field
+                        v-model="editedAirport.city"
+                        label="City"
+                      ></v-text-field>
+                      <v-text-field
+                        v-model="editedAirport.country"
+                        label="Country"
+                      ></v-text-field>
+                      <v-text-field
+                        v-model="editedAirport.iata"
+                        label="IATA"
+                      ></v-text-field>
+                      <v-text-field
+                        v-model="editedAirport.icao"
+                        label="ICAO"
+                      ></v-text-field>
                     </v-col>
                     <v-col cols="12" sm="6" md="6">
-                      <v-text-field v-model="editedAirport.latitude" label="Latitude"></v-text-field>
-                      <v-text-field v-model="editedAirport.longitude" label="Longitude"></v-text-field>
-                      <v-text-field v-model="editedAirport.altitude" label="Altitude"></v-text-field>
-                      <v-text-field v-model="editedAirport.timezone" label="Timezone"></v-text-field>
-                      <v-text-field v-model="editedAirport.tz" label="TZ"></v-text-field>
+                      <v-text-field
+                        v-model="editedAirport.latitude"
+                        label="Latitude"
+                      ></v-text-field>
+                      <v-text-field
+                        v-model="editedAirport.longitude"
+                        label="Longitude"
+                      ></v-text-field>
+                      <v-text-field
+                        v-model="editedAirport.altitude"
+                        label="Altitude"
+                      ></v-text-field>
+                      <v-text-field
+                        v-model="editedAirport.timezone"
+                        label="Timezone"
+                      ></v-text-field>
+                      <v-text-field
+                        v-model="editedAirport.tz"
+                        label="TZ"
+                      ></v-text-field>
                     </v-col>
                   </v-row>
                 </v-container>
@@ -56,14 +88,16 @@
               <v-card-actions>
                 <v-spacer></v-spacer>
                 <v-btn color="blue darken-1" text @click="close">Cancel</v-btn>
-                <v-btn color="blue darken-1" @click="dialog2 = !dialog2">Save</v-btn>
+                <v-btn color="blue darken-1" @click="dialog2 = !dialog2"
+                  >Save</v-btn
+                >
               </v-card-actions>
             </v-card>
           </v-dialog>
         </v-toolbar>
       </template>
 
-      <template v-slot:[&#x60;item.actions&#x60;]="{ item }">
+      <template v-slot:[`item.actions`]="{ item }">
         <v-tooltip bottom>
           <template v-slot:activator="{ on, attrs }">
             <v-icon
@@ -72,14 +106,17 @@
               @click="setAirport(item, 2)"
               v-bind="attrs"
               v-on="on"
-            >mdi-pencil</v-icon>
+              >mdi-pencil</v-icon
+            >
           </template>
           <span>Edit Airport</span>
         </v-tooltip>
 
         <v-tooltip bottom>
           <template v-slot:activator="{ on, attrs }">
-            <v-icon small @click="setAirport(item, 1)" v-bind="attrs" v-on="on">mdi-delete</v-icon>
+            <v-icon small @click="setAirport(item, 1)" v-bind="attrs" v-on="on"
+              >mdi-delete</v-icon
+            >
           </template>
           <span>Delete Airport</span>
         </v-tooltip>
@@ -101,10 +138,14 @@
           <p>Are you sure you want to create the airport?</p>
         </v-card-title>
         <v-card-actions>
-          <v-btn color="primary" class="ml-5" text @click="dialog2 = !dialog2">No</v-btn>
+          <v-btn color="primary" class="ml-5" text @click="dialog2 = !dialog2"
+            >No</v-btn
+          >
           <v-spacer></v-spacer>
           <template>
-            <v-btn color="primary" class="mr-5" black @click="airportHandler()">Yes</v-btn>
+            <v-btn color="primary" class="mr-5" black @click="airportHandler()"
+              >Yes</v-btn
+            >
           </template>
         </v-card-actions>
       </v-card>
@@ -129,15 +170,15 @@ export default {
       {
         text: "Name",
         align: "start",
-        value: "name"
+        value: "name",
       },
       { text: "City", value: "city" },
       { text: "Country", value: "country" },
       { text: "IATA", value: "iata" },
       { text: "ICAO", value: "icao" },
-      { text: "Actions", value: "actions", sortable: false }
+      { text: "Actions", value: "actions", sortable: false },
     ],
-    airports: this.allAirports,
+    airports: [],
     airport: {},
     handlerType: 0,
     editedAirport: {
@@ -153,7 +194,7 @@ export default {
       source: "",
       timezone: "",
       type: "",
-      tz: ""
+      tz: "",
     },
     defaultAirport: {
       id: "",
@@ -168,21 +209,21 @@ export default {
       source: "",
       timezone: "",
       type: "",
-      tz: ""
-    }
+      tz: "",
+    },
   }),
 
   computed: {
     ...mapGetters(["allAirports"]),
     formTitle() {
       return this.handlerType === 2 ? "Edit Airport" : "New Airport";
-    }
+    },
   },
 
   watch: {
     dialog(val) {
       val || this.close();
-    }
+    },
   },
 
   created() {
@@ -195,7 +236,7 @@ export default {
       "createAirport",
       "updateAirport",
       "deleteAirport",
-      "searchAirport"
+      "searchAirport",
     ]),
     initialize() {
       this.airports = this.allAirports;
@@ -222,7 +263,7 @@ export default {
           id: generate(),
           DST: "U",
           source: "OurAirports",
-          type: "airport"
+          type: "airport",
         });
         this.createAirport(newAirport);
       }
@@ -231,14 +272,15 @@ export default {
       this.dialog = false;
       this.dialog2 = false;
       this.getAllAirports();
+      this.airports = this.allAirports;
     },
 
     close() {
       this.editedAirport = Object.assign({}, this.defaultAirport);
       this.handlerType = 0;
       this.dialog = false;
-    }
-  }
+    },
+  },
 };
 </script>
 <style scoped>
