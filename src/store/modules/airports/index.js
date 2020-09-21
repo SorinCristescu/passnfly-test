@@ -10,7 +10,7 @@ const getters = {
 };
 
 const actions = {
-  async getAllAirport({ commit }) {
+  async getAllAirports({ commit }) {
     try {
       const response = await axios.get(`${BASE_URL}`);
       commit("setAirports", response.data);
@@ -18,26 +18,26 @@ const actions = {
       console.log(error);
     }
   },
-  async createAirport({ commit }, formData) {
+  async createAirport({ commit }, airport) {
     try {
-      const response = await axios.post(`${BASE_URL}`, formData);
+      const response = await axios.post(`${BASE_URL}`, airport);
       commit("addAirport", response.data);
     } catch (error) {
       console.log(error);
     }
   },
-  async updAirport({ commit }, airport) {
+  async updateAirport({ commit }, airport) {
     try {
       const response = await axios.put(`${BASE_URL}${airport.id}`, airport);
-      commit("updateAirport", response.data);
+      commit("editAirport", response.data);
     } catch (error) {
       console.log(error);
     }
   },
-  async removeAirport({ commit }, id) {
+  async deleteAirport({ commit }, id) {
     try {
       const response = await axios.delete(`${BASE_URL}${id}`);
-      commit("deleteAirport", response.data);
+      commit("removeAirport", response.data);
     } catch (error) {
       console.log(error);
     }
@@ -46,9 +46,10 @@ const actions = {
 
 const mutations = {
   setAirports: (state, airports) => (state.airports = airports),
-  addAirport: (state, airports) => (state.airports = airports),
-  updateAirport: (state, airports) => (state.airports = airports),
-  deleteAirport: (state, airports) => (state.airports = airports),
+  addAirport: (state, airport) =>
+    (state.airports = state.airports.push(airport)),
+  editAirport: (state, airports) => (state.airports = airports),
+  removeAirport: (state, airports) => (state.airports = airports),
 };
 
 export default {

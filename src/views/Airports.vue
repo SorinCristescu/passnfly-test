@@ -2,7 +2,7 @@
   <div class="airports">
     <v-data-table
       :headers="headers"
-      :items="allAirports"
+      :items="airports"
       :items-per-page="10"
       :search="search"
       class="elevation-5 ma-5"
@@ -22,67 +22,32 @@
             hide-details
           ></v-text-field>
           <v-spacer></v-spacer>
+
           <v-dialog v-model="dialog" max-width="60%">
             <template v-slot:activator="{ on, attrs }">
-              <v-btn color="primary" dark class="mb-2" v-bind="attrs" v-on="on"
-                >+ Add New Aiport</v-btn
-              >
+              <v-btn color="primary" dark class="mb-2" v-bind="attrs" v-on="on">+ Add New Aiport</v-btn>
             </template>
+
             <v-card>
               <v-card-title>
                 <span class="headline">{{ formTitle }}</span>
               </v-card-title>
-
               <v-card-text>
                 <v-container>
                   <v-row>
-                    <v-col cols="12" sm="4" md="4">
-                      <v-text-field
-                        dense
-                        height="30px"
-                        v-model="editedItem.name"
-                        label="Name"
-                      ></v-text-field>
-                      <v-text-field
-                        v-model="editedItem.city"
-                        label="City"
-                      ></v-text-field>
-                      <v-text-field
-                        v-model="editedItem.country"
-                        label="Country"
-                      ></v-text-field>
-                      <v-text-field
-                        v-model="editedItem.iata"
-                        label="IATA"
-                      ></v-text-field>
-                      <v-text-field
-                        v-model="editedItem.icao"
-                        label="ICAO"
-                      ></v-text-field>
-                      <v-text-field
-                        v-model="editedItem.timezone"
-                        label="Timezone"
-                      ></v-text-field>
-                      <v-text-field
-                        v-model="editedItem.tz"
-                        label="TZ"
-                      ></v-text-field>
+                    <v-col cols="12" sm="6" md="6">
+                      <v-text-field v-model="editedAirport.name" label="Name"></v-text-field>
+                      <v-text-field v-model="editedAirport.city" label="City"></v-text-field>
+                      <v-text-field v-model="editedAirport.country" label="Country"></v-text-field>
+                      <v-text-field v-model="editedAirport.iata" label="IATA"></v-text-field>
+                      <v-text-field v-model="editedAirport.icao" label="ICAO"></v-text-field>
                     </v-col>
-                    <v-col cols="12" sm="8" md="8">
-                      <v-row class="pl-10 pr-10">
-                        <p>Latitude:</p>
-                        <v-spacer></v-spacer>
-                        <p>Longitude:</p>
-                        <v-spacer></v-spacer>
-                        <p>Altitude:</p>
-                        <Map
-                          ref="map"
-                          apiKey="C12Se5f7UD7sOTcQ0MFSyw9zCJeO4i7qclGL6c-tTSE"
-                          latitude="37"
-                          longitude="-121"
-                          zoom="10"
-                        />
-                      </v-row>
+                    <v-col cols="12" sm="6" md="6">
+                      <v-text-field v-model="editedAirport.latitude" label="Latitude"></v-text-field>
+                      <v-text-field v-model="editedAirport.longitude" label="Longitude"></v-text-field>
+                      <v-text-field v-model="editedAirport.altitude" label="Altitude"></v-text-field>
+                      <v-text-field v-model="editedAirport.timezone" label="Timezone"></v-text-field>
+                      <v-text-field v-model="editedAirport.tz" label="TZ"></v-text-field>
                     </v-col>
                   </v-row>
                 </v-container>
@@ -91,33 +56,30 @@
               <v-card-actions>
                 <v-spacer></v-spacer>
                 <v-btn color="blue darken-1" text @click="close">Cancel</v-btn>
-                <v-btn color="blue darken-1" text @click="save">Save</v-btn>
+                <v-btn color="blue darken-1" @click="dialog2 = !dialog2">Save</v-btn>
               </v-card-actions>
             </v-card>
           </v-dialog>
         </v-toolbar>
       </template>
-      <template v-slot:[`item.actions`]="{ item }">
+
+      <template v-slot:[&#x60;item.actions&#x60;]="{ item }">
         <v-tooltip bottom>
           <template v-slot:activator="{ on, attrs }">
             <v-icon
               small
               class="mr-2"
-              @click="editItem(item)"
+              @click="setAirport(item, 2)"
               v-bind="attrs"
               v-on="on"
-            >
-              mdi-pencil
-            </v-icon>
+            >mdi-pencil</v-icon>
           </template>
           <span>Edit Airport</span>
         </v-tooltip>
 
         <v-tooltip bottom>
           <template v-slot:activator="{ on, attrs }">
-            <v-icon small @click="deleteItem(item)" v-bind="attrs" v-on="on">
-              mdi-delete
-            </v-icon>
+            <v-icon small @click="setAirport(item, 1)" v-bind="attrs" v-on="on">mdi-delete</v-icon>
           </template>
           <span>Delete Airport</span>
         </v-tooltip>
@@ -126,11 +88,34 @@
         <v-btn color="primary" @click="initialize">Reset</v-btn>
       </template>
     </v-data-table>
+
+    <v-dialog v-model="dialog2" class="pa-10" max-width="500px" height="300px">
+      <v-card>
+        <v-card-title v-if="this.handlerType === 1">
+          <p>Are you sure you want to delete the airport?</p>
+        </v-card-title>
+        <v-card-title v-else-if="this.handlerType === 2">
+          <p>Are you sure you want to update the airport?</p>
+        </v-card-title>
+        <v-card-title v-else>
+          <p>Are you sure you want to create the airport?</p>
+        </v-card-title>
+        <v-card-actions>
+          <v-btn color="primary" class="ml-5" text @click="dialog2 = !dialog2">No</v-btn>
+          <v-spacer></v-spacer>
+          <template>
+            <v-btn color="primary" class="mr-5" black @click="airportHandler()">Yes</v-btn>
+          </template>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </div>
 </template>
 
 <script>
+import { generate } from "shortid";
 import { mapGetters, mapActions } from "vuex";
+
 export default {
   name: "Airports",
   components: {
@@ -138,22 +123,39 @@ export default {
   },
   data: () => ({
     search: "",
+    dialog2: false,
     dialog: false,
     headers: [
       {
         text: "Name",
         align: "start",
-        value: "name",
+        value: "name"
       },
       { text: "City", value: "city" },
       { text: "Country", value: "country" },
       { text: "IATA", value: "iata" },
       { text: "ICAO", value: "icao" },
-      { text: "Actions", value: "actions", sortable: false },
+      { text: "Actions", value: "actions", sortable: false }
     ],
-    airports: [],
-    editedIndex: -1,
-    editedItem: {
+    airports: this.allAirports,
+    airport: {},
+    handlerType: 0,
+    editedAirport: {
+      id: "",
+      name: "",
+      city: "",
+      country: "",
+      iata: "",
+      icao: "",
+      DST: "",
+      latitude: "",
+      longitude: "",
+      source: "",
+      timezone: "",
+      type: "",
+      tz: ""
+    },
+    defaultAirport: {
       id: "",
       name: "",
       city: "",
@@ -163,92 +165,85 @@ export default {
       DST: "U",
       latitude: "",
       longitude: "",
-      source: "OurAirports",
+      source: "",
       timezone: "",
-      type: "airport",
-      tz: "",
-    },
-    defaultItem: {
-      id: "",
-      name: "",
-      city: "",
-      country: "",
-      iata: "",
-      icao: "",
-      DST: "U",
-      latitude: "",
-      longitude: "",
-      source: "OurAirports",
-      timezone: "",
-      type: "airport",
-      tz: "",
-    },
+      type: "",
+      tz: ""
+    }
   }),
 
   computed: {
     ...mapGetters(["allAirports"]),
     formTitle() {
-      return this.editedIndex === -1 ? "New Item" : "Edit Item";
-    },
+      return this.handlerType === 2 ? "Edit Airport" : "New Airport";
+    }
   },
 
   watch: {
     dialog(val) {
       val || this.close();
-    },
+    }
   },
 
   created() {
-    this.getAllAirport();
+    this.getAllAirports();
   },
 
   methods: {
     ...mapActions([
-      "getAllAirport",
-      "addNewAirport",
+      "getAllAirports",
+      "createAirport",
       "updateAirport",
       "deleteAirport",
-      "searchAirport",
+      "searchAirport"
     ]),
-  },
+    initialize() {
+      this.airports = this.allAirports;
+    },
 
-  initialize() {
-    this.getAllAirport();
-  },
+    setAirport(item, type) {
+      this.handlerType = type;
+      this.airport = item;
+      if (type === 1) {
+        this.dialog2 = true;
+      } else if (type === 2) {
+        this.dialog = true;
+        this.editedAirport = item;
+      }
+    },
 
-  editItem(item) {
-    this.editedIndex = this.desserts.indexOf(item);
-    this.editedItem = Object.assign({}, item);
-    this.dialog = true;
-  },
+    airportHandler() {
+      if (this.handlerType === 1) {
+        this.deleteAirport(this.airport.id);
+      } else if (this.handlerType === 2) {
+        this.updateAirport(this.editedAirport);
+      } else {
+        const newAirport = Object.assign(this.editedAirport, {
+          id: generate(),
+          DST: "U",
+          source: "OurAirports",
+          type: "airport"
+        });
+        this.createAirport(newAirport);
+      }
+      this.editedAirport = Object.assign({}, this.defaultAirport);
+      this.handlerType = 0;
+      this.dialog = false;
+      this.dialog2 = false;
+      this.getAllAirports();
+    },
 
-  deleteItem(item) {
-    const index = this.desserts.indexOf(item);
-    confirm("Are you sure you want to delete this item?") &&
-      this.desserts.splice(index, 1);
-  },
-
-  close() {
-    this.dialog = false;
-    this.$nextTick(() => {
-      this.editedItem = Object.assign({}, this.defaultItem);
-      this.editedIndex = -1;
-    });
-  },
-
-  save() {
-    if (this.editedIndex > -1) {
-      Object.assign(this.desserts[this.editedIndex], this.editedItem);
-    } else {
-      this.desserts.push(this.editedItem);
+    close() {
+      this.editedAirport = Object.assign({}, this.defaultAirport);
+      this.handlerType = 0;
+      this.dialog = false;
     }
-    this.close();
-  },
+  }
 };
 </script>
 <style scoped>
 .airports {
   width: 100%;
-  height: 100vh;
+  height: 80vh;
 }
 </style>
