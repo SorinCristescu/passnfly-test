@@ -47,9 +47,17 @@ const actions = {
 const mutations = {
   setAirports: (state, airports) => (state.airports = airports),
   addAirport: (state, airport) =>
-    (state.airports = state.airports.push(airport)),
-  editAirport: (state, airports) => (state.airports = airports),
-  removeAirport: (state, airports) => (state.airports = airports),
+    (state.airports = state.airports.unshift(airport)),
+  editAirport: (state, updAirport) => {
+    const index = state.airports.findIndex(
+      (airport) => airport.id === updAirport.id
+    );
+    if (index !== -1) {
+      state.airports.splice(index, 1, updAirport);
+    }
+  },
+  removeAirport: (state, id) =>
+    (state.airports = state.airports.filter((airport) => airport.id !== id)),
 };
 
 export default {

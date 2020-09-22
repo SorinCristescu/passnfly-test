@@ -1,56 +1,8 @@
 {
   "airports": [
     {
-      "id": 20,
-      "name": "Vestmannaeyjar Air",
-      "city": "Vestmannaeyjar",
-      "country": "Iceland",
-      "iata": "VEY",
-      "icao": "BIVM",
-      "latitude": 63.42430114746094,
-      "longitude": -20.278900146484375,
-      "altitude": 326,
-      "timezone": 0,
-      "DST": "N",
-      "tz": "Atlantic/Reykjavik",
-      "type": "airport",
-      "source": "OurAirports"
-    },
-    {
-      "id": 21,
-      "name": "Sault Ste Marie Airport",
-      "city": "Sault Sainte Marie",
-      "country": "Canada",
-      "iata": "YAM",
-      "icao": "CYAM",
-      "latitude": 46.48500061035156,
-      "longitude": -84.5093994140625,
-      "altitude": 630,
-      "timezone": -5,
-      "DST": "A",
-      "tz": "America/Toronto",
-      "type": "airport",
-      "source": "OurAirports"
-    },
-    {
-      "id": 22,
-      "name": "Winnipeg / St. Andrews Airport",
-      "city": "Winnipeg",
-      "country": "Canada",
-      "iata": "",
-      "icao": "CYAV",
-      "latitude": 50.0564002991,
-      "longitude": -97.03250122070001,
-      "altitude": 760,
-      "timezone": -6,
-      "DST": "A",
-      "tz": "America/Winnipeg",
-      "type": "airport",
-      "source": "OurAirports"
-    },
-    {
       "id": 23,
-      "name": "Halifax / CFB Shearwater Heliport",
+      "name": "Halifax / CFB Shearw",
       "city": "Halifax",
       "country": "Canada",
       "iata": "",
@@ -93,22 +45,6 @@
       "timezone": -8,
       "DST": "A",
       "tz": "America/Vancouver",
-      "type": "airport",
-      "source": "OurAirports"
-    },
-    {
-      "id": 26,
-      "name": "Kugaaruk Airport",
-      "city": "Pelly Bay",
-      "country": "Canada",
-      "iata": "YBB",
-      "icao": "CYBB",
-      "latitude": 68.534401,
-      "longitude": -89.808098,
-      "altitude": 56,
-      "timezone": -7,
-      "DST": "A",
-      "tz": "America/Edmonton",
       "type": "airport",
       "source": "OurAirports"
     },
@@ -178,7 +114,7 @@
     },
     {
       "id": 31,
-      "name": "Brandon Municipal Airport",
+      "name": "Brandon Municipal ",
       "city": "Brandon",
       "country": "Canada",
       "iata": "YBR",
@@ -122895,6 +122831,22 @@
       "type": "airport",
       "tz": "1",
       "altitude": "2123"
+    },
+    {
+      "id": "rYg-SXW3X",
+      "name": "SADA",
+      "city": "asSAS",
+      "country": "Romania",
+      "iata": "TES",
+      "icao": "asA",
+      "DST": "U",
+      "latitude": "524767",
+      "longitude": "524265",
+      "source": "OurAirports",
+      "timezone": "33",
+      "type": "airport",
+      "tz": "2",
+      "altitude": "233"
     }
   ]
 }

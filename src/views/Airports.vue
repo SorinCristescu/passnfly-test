@@ -128,14 +128,14 @@
 
     <v-dialog v-model="dialog2" class="pa-10" max-width="500px" height="300px">
       <v-card>
-        <v-card-title v-if="this.handlerType === 1">
-          <p>Are you sure you want to delete the airport?</p>
-        </v-card-title>
-        <v-card-title v-else-if="this.handlerType === 2">
-          <p>Are you sure you want to update the airport?</p>
-        </v-card-title>
-        <v-card-title v-else>
-          <p>Are you sure you want to create the airport?</p>
+        <v-card-title>
+          <p v-if="this.handlerType === 1">
+            Are you sure you want to delete the airport?
+          </p>
+          <p v-else-if="this.handlerType === 2">
+            Are you sure you want to update the airport?
+          </p>
+          <p v-else>Are you sure you want to create the airport?</p>
         </v-card-title>
         <v-card-actions>
           <v-btn color="primary" class="ml-5" text @click="dialog2 = !dialog2"
@@ -265,18 +265,17 @@ export default {
           source: "OurAirports",
           type: "airport",
         });
+
         this.createAirport(newAirport);
       }
-      this.editedAirport = Object.assign({}, this.defaultAirport);
+      this.editedAirport = this.defaultAirport;
       this.handlerType = 0;
       this.dialog = false;
       this.dialog2 = false;
-      this.getAllAirports();
-      this.airports = this.allAirports;
     },
 
     close() {
-      this.editedAirport = Object.assign({}, this.defaultAirport);
+      this.editedAirport = this.defaultAirport;
       this.handlerType = 0;
       this.dialog = false;
     },
