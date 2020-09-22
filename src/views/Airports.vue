@@ -121,9 +121,6 @@
           <span>Delete Airport</span>
         </v-tooltip>
       </template>
-      <template v-slot:no-data>
-        <v-btn color="primary" @click="initialize">Reset</v-btn>
-      </template>
     </v-data-table>
 
     <v-dialog v-model="dialog2" class="pa-10" max-width="500px" height="300px">
@@ -238,9 +235,6 @@ export default {
       "deleteAirport",
       "searchAirport",
     ]),
-    initialize() {
-      this.airports = this.allAirports;
-    },
 
     setAirport(item, type) {
       this.handlerType = type;
@@ -259,12 +253,13 @@ export default {
       } else if (this.handlerType === 2) {
         this.updateAirport(this.editedAirport);
       } else {
-        const newAirport = Object.assign(this.editedAirport, {
+        const newAirport = {
+          ...this.editedAirport,
           id: generate(),
           DST: "U",
           source: "OurAirports",
           type: "airport",
-        });
+        };
 
         this.createAirport(newAirport);
       }
@@ -272,6 +267,7 @@ export default {
       this.handlerType = 0;
       this.dialog = false;
       this.dialog2 = false;
+      this.getAllAirports();
     },
 
     close() {
